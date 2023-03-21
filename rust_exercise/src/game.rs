@@ -1,15 +1,22 @@
 extern crate termcolor;
+
+use crate::board::Board;
+
 use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 use std::io::Write;
 
 pub struct Game {
+    board: Board,
 }
 
 impl Game {
-     pub fn new() -> Self {
-        Game{}
+    pub fn new(board: Board) -> Self {
+        Game { board }
     }
 
+    pub fn board(&self) -> Board {
+        self.board
+    }
 
     pub fn greeting(&self) {
         println!(
@@ -55,7 +62,7 @@ impl Game {
         println!("-------------");
     }
 
-    pub fn ask_user(&self,state: &mut [char], player: char) {
+    pub fn ask_user(&mut self, state: &mut [char; 9], player: char) {
         loop {
             print!("Player '");
             self.print_player(&player);
@@ -84,6 +91,7 @@ impl Game {
 
                 state[number] = player;
 
+                self.board.update_state(*state);
                 break;
             } else {
                 println!("Only numbers are allowed.");
@@ -118,5 +126,4 @@ impl Game {
     pub fn is_over(&self, state: &[char]) -> bool {
         state.iter().all(|&v| v == 'X' || v == 'O')
     }
-
 }
