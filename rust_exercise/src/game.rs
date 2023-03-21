@@ -3,7 +3,6 @@ use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor}
 use std::io::Write;
 
 pub struct Game {
-
 }
 
 impl Game {
