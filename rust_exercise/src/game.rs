@@ -1,6 +1,6 @@
 extern crate termcolor;
 
-use crate::board::Board;
+use crate::{board::Board, player::Player};
 
 use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 use std::io::Write;
@@ -62,10 +62,10 @@ impl Game {
         println!("-------------");
     }
 
-    pub fn ask_user(&mut self, state: &mut [char; 9], player: char) {
+    pub fn ask_user(&mut self, state: &mut [char; 9], player: Player) {
         loop {
             print!("Player '");
-            self.print_player(&player);
+            self.print_player(&player.to_char());
             println!("', enter a number: ");
 
             let mut input = String::new();
@@ -89,7 +89,7 @@ impl Game {
                     continue;
                 }
 
-                state[number] = player;
+                state[number] = player.to_char();
 
                 self.board.update_state(*state);
                 break;
