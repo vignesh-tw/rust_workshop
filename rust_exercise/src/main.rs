@@ -1,12 +1,10 @@
-mod game;
 mod board;
+mod game;
 mod player;
 
 use board::Board;
 use game::Game;
 use player::Player;
-
-
 
 fn main() {
     let mut board = Board::new();
@@ -40,7 +38,8 @@ fn main() {
             break;
         }
 
-        // Switch player
-        player = if player == Player::X { Player::O } else { Player::X }
+        player.switch_player();
     }
 }
+
+

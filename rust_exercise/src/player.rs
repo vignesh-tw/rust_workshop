@@ -12,4 +12,12 @@ impl Player {
             'O'
         }
     }
+
+    pub fn switch_player(&mut self) {
+        *self = if *self == Player::X {
+            Player::O
+        } else {
+            Player::X
+        };
+    }
 }
