@@ -1,9 +1,6 @@
-extern crate termcolor;
+
 
 use crate::{board::Board, player::Player};
-
-use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
-use std::io::Write;
 
 pub struct Game {
     board: Board,
@@ -27,45 +24,12 @@ impl Game {
         )
     }
 
-    pub fn print_player(&self, player: &char) {
-        let mut stdout = StandardStream::stdout(ColorChoice::Always);
-
-        if player == &'X' {
-            stdout
-                .set_color(ColorSpec::new().set_fg(Some(Color::Blue)))
-                .unwrap();
-        } else if player == &'O' {
-            stdout
-                .set_color(ColorSpec::new().set_fg(Some(Color::Green)))
-                .unwrap();
-        }
-
-        write!(&mut stdout, "{}", player).unwrap();
-        stdout.reset().unwrap();
-    }
-
-    pub fn draw(&self, state: &[char]) {
-        println!("\n");
-
-        for i in (0..3).rev() {
-            let offset = i * 3;
-
-            print!("-------------\n| ");
-            self.print_player(&state[offset]);
-            print!(" | ");
-            self.print_player(&state[offset + 1]);
-            print!(" | ");
-            self.print_player(&state[offset + 2]);
-            println!(" |");
-        }
-
-        println!("-------------");
-    }
+    
 
     pub fn ask_user(&mut self, state: &mut [char; 9], player: Player) {
         loop {
             print!("Player '");
-            self.print_player(&player.to_char());
+            player.print();
             println!("', enter a number: ");
 
             let mut input = String::new();
@@ -84,7 +48,7 @@ impl Game {
 
                 if state[number] == 'X' || state[number] == 'O' {
                     print!("This field is already taken by '");
-                    self.print_player(&state[number]);
+                    player.print();
                     println!("'.");
                     continue;
                 }

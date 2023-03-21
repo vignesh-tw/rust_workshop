@@ -1,3 +1,7 @@
+extern crate termcolor;
+use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+use std::io::Write;
+
 #[derive(Clone, Copy, PartialEq)]
 pub enum Player {
     X,
@@ -13,11 +17,28 @@ impl Player {
         }
     }
 
-    pub fn switch_player(&mut self) {
+    pub fn switch(&mut self) {
         *self = if *self == Player::X {
             Player::O
         } else {
             Player::X
         };
+    }
+
+    pub fn print(&self) {
+        let mut stdout = StandardStream::stdout(ColorChoice::Always);
+
+        if *self == Player::X {
+            stdout
+                .set_color(ColorSpec::new().set_fg(Some(Color::Blue)))
+                .unwrap();
+        } else if *self == Player::O {
+            stdout
+                .set_color(ColorSpec::new().set_fg(Some(Color::Green)))
+                .unwrap();
+        }
+
+        write!(&mut stdout, "{}", self.to_char()).unwrap();
+        stdout.reset().unwrap();
     }
 }

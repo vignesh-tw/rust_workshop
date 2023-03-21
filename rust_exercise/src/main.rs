@@ -17,29 +17,27 @@ fn main() {
 
     loop {
         // Draw the field
-        game.draw(&game.board().state());
+        game.board().draw();
 
         // Ask for user input
         game.ask_user(&mut game.board().state(), player);
 
         // Check if a player won
         if game.has_won(&game.board().state()) {
-            game.draw(&game.board().state());
+            game.board().draw();
             print!("Player '");
-            game.print_player(&player.to_char());
+            player.print();
             println!("' won! \\(^.^)/");
             break;
         }
 
         // Check if all fields are used
         if game.is_over(&game.board().state()) {
-            game.draw(&game.board().state());
+            game.board().draw();
             println!("All fields are used. No one won. (._.)");
             break;
         }
 
-        player.switch_player();
+        player.switch();
     }
 }
-
-
