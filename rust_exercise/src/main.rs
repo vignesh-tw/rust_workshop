@@ -9,27 +9,27 @@ fn main() {
     let game = Game::new();
 
     // Welcome the player
-    Game::greeting();
+    game.greeting();
 
     loop {
         // Draw the field
-        Game::draw(&state);
+        game.draw(&state);
 
         // Ask for user input
-        Game::ask_user(&mut state, player);
+        game.ask_user(&mut state, player);
 
         // Check if a player won
-        if Game::has_won(&state) {
-            Game::draw(&state);
+        if game.has_won(&state) {
+            game.draw(&state);
             print!("Player '");
-            Game::print_player(&player);
+            game.print_player(&player);
             println!("' won! \\(^.^)/");
             break;
         }
 
         // Check if all fields are used
-        if Game::is_over(&state) {
-            Game::draw(&state);
+        if game.is_over(&state) {
+            game.draw(&state);
             println!("All fields are used. No one won. (._.)");
             break;
         }

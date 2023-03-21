@@ -12,7 +12,7 @@ impl Game {
     }
 
 
-    pub fn greeting() {
+    pub fn greeting(&self) {
         println!(
             "\nRust TicTacToe\n\
          --------------\n\
@@ -21,7 +21,7 @@ impl Game {
         )
     }
 
-    pub fn print_player(player: &char) {
+    pub fn print_player(&self, player: &char) {
         let mut stdout = StandardStream::stdout(ColorChoice::Always);
 
         if player == &'X' {
@@ -38,28 +38,28 @@ impl Game {
         stdout.reset().unwrap();
     }
 
-    pub fn draw(state: &[char]) {
+    pub fn draw(&self, state: &[char]) {
         println!("\n");
 
         for i in (0..3).rev() {
             let offset = i * 3;
 
             print!("-------------\n| ");
-            Self::print_player(&state[offset]);
+            self.print_player(&state[offset]);
             print!(" | ");
-            Self::print_player(&state[offset + 1]);
+            self.print_player(&state[offset + 1]);
             print!(" | ");
-            Self::print_player(&state[offset + 2]);
+            self.print_player(&state[offset + 2]);
             println!(" |");
         }
 
         println!("-------------");
     }
 
-    pub fn ask_user(state: &mut [char], player: char) {
+    pub fn ask_user(&self,state: &mut [char], player: char) {
         loop {
             print!("Player '");
-            Self::print_player(&player);
+            self.print_player(&player);
             println!("', enter a number: ");
 
             let mut input = String::new();
@@ -78,7 +78,7 @@ impl Game {
 
                 if state[number] == 'X' || state[number] == 'O' {
                     print!("This field is already taken by '");
-                    Self::print_player(&state[number]);
+                    self.print_player(&state[number]);
                     println!("'.");
                     continue;
                 }
@@ -93,7 +93,7 @@ impl Game {
         }
     }
 
-    pub fn has_won(state: &[char]) -> bool {
+    pub fn has_won(&self, state: &[char]) -> bool {
         for tmp in 0..3 {
             if state[tmp] == state[tmp + 3] && state[tmp] == state[tmp + 6] {
                 return true;
@@ -116,7 +116,7 @@ impl Game {
     }
 
     #[inline(always)]
-    pub fn is_over(state: &[char]) -> bool {
+    pub fn is_over(&self, state: &[char]) -> bool {
         state.iter().all(|&v| v == 'X' || v == 'O')
     }
 
