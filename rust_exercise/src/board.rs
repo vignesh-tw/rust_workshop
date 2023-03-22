@@ -66,7 +66,7 @@ impl Board {
         let mut stdout = StandardStream::stdout(ColorChoice::Always);
 
         match state {
-            NotOccupied(_) => write!(&mut stdout, "-").unwrap(),
+            NotOccupied(position) => write!(&mut stdout, "{}", position).unwrap(),
             Occupied(player) => {
                 let state = player.to_char();
                 if state == 'X' {

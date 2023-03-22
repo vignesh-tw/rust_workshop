@@ -11,7 +11,6 @@ fn main() {
     let mut player = Player::X;
     let mut game = Game::new(board);
 
-    // Welcome the player
     game.greeting();
 
     loop {
