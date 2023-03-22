@@ -1,5 +1,5 @@
-
-
+use board::BoardPosition;
+use board::BoardPosition::{NotOccupied, Occupied};
 use crate::{board::Board, player::Player};
 
 pub struct Game {
@@ -26,7 +26,7 @@ impl Game {
 
     
 
-    pub fn ask_user(&mut self, state: &mut [char; 9], player: Player) {
+    pub fn ask_user(&mut self, state: &mut [BoardPosition; 9], player: Player) {
         loop {
             print!("Player '");
             player.print();
@@ -45,15 +45,18 @@ impl Game {
                 }
 
                 let number = number - 1;
-
-                if state[number] == 'X' || state[number] == 'O' {
-                    print!("This field is already taken by '");
-                    player.print();
-                    println!("'.");
-                    continue;
+                match state[number] {
+                    NotOccupied(_) => {}
+                    Occupied(player) =>
+                        if player == Player::X || player == Player::O {
+                            print!("This field is already taken by '");
+                            player.print();
+                            println!("'.");
+                            continue;
+                        }
                 }
 
-                state[number] = player.to_char();
+                state[number] = Occupied(player);
 
                 self.board.update_state(*state);
                 break;
@@ -64,7 +67,7 @@ impl Game {
         }
     }
 
-    pub fn has_won(&self, state: &[char]) -> bool {
+    pub fn has_won(&self, state: &[BoardPosition]) -> bool {
         for tmp in 0..3 {
             if state[tmp] == state[tmp + 3] && state[tmp] == state[tmp + 6] {
                 return true;
@@ -87,7 +90,7 @@ impl Game {
     }
 
     #[inline(always)]
-    pub fn is_over(&self, state: &[char]) -> bool {
-        state.iter().all(|&v| v == 'X' || v == 'O')
+    pub fn is_over(&self, state: &[BoardPosition]) -> bool {
+        state.iter().all(|&v| v == Occupied(Player::X) || v == Occupied(Player::O))
     }
 }

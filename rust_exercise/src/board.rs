@@ -1,25 +1,46 @@
-use crate::player::Player;
 extern crate termcolor;
-use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+
 use std::io::Write;
+
+use board::BoardPosition::{NotOccupied, Occupied};
+
+use crate::player::Player;
+
+use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+
+#[derive(Clone, Copy, PartialEq)]
+pub enum BoardPosition {
+    Occupied(Player),
+    NotOccupied(u8),
+}
 
 #[derive(Clone, Copy)]
 pub struct Board {
-    state: [char; 9],
+    state: [BoardPosition; 9],
 }
 
 impl Board {
     pub fn new() -> Self {
         Board {
-            state: ['1', '2', '3', '4', '5', '6', '7', '8', '9'],
+            state: [
+                NotOccupied(1),
+                NotOccupied(2),
+                NotOccupied(3),
+                NotOccupied(4),
+                NotOccupied(5),
+                NotOccupied(6),
+                NotOccupied(7),
+                NotOccupied(8),
+                NotOccupied(9),
+            ],
         }
     }
 
-    pub fn state(&self) -> [char; 9] {
+    pub fn state(&self) -> [BoardPosition; 9] {
         self.state
     }
 
-    pub fn update_state(&mut self, state: [char; 9]) {
+    pub fn update_state(&mut self, state: [BoardPosition; 9]) {
         self.state = state;
     }
 
@@ -41,20 +62,27 @@ impl Board {
         println!("-------------");
     }
 
-    pub fn print(&self, state: &char) {
+    pub fn print(&self, state: &BoardPosition) {
         let mut stdout = StandardStream::stdout(ColorChoice::Always);
 
-        if state == &'X' {
-            stdout
-                .set_color(ColorSpec::new().set_fg(Some(Color::Blue)))
-                .unwrap();
-        } else if state == &'O' {
-            stdout
-                .set_color(ColorSpec::new().set_fg(Some(Color::Green)))
-                .unwrap();
+        match state {
+            NotOccupied(_) => write!(&mut stdout, "-").unwrap(),
+            Occupied(player) => {
+                let state = player.to_char();
+                if state == 'X' {
+                    stdout
+                        .set_color(ColorSpec::new().set_fg(Some(Color::Blue)))
+                        .unwrap();
+                } else if state == 'O' {
+                    stdout
+                        .set_color(ColorSpec::new().set_fg(Some(Color::Green)))
+                        .unwrap();
+                }
+
+                write!(&mut stdout, "{}", state).unwrap();
+            }
         }
 
-        write!(&mut stdout, "{}", state).unwrap();
         stdout.reset().unwrap();
     }
 }
