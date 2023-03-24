@@ -149,3 +149,5 @@ There are three main concepts with Rust:
 1. **Ownership** (only one variable "owns" the data at one time, and the owner is in charge of deallocating)
 2. **Borrowing** (you can borrow a reference to an owned variable)
 3. **Lifetimes** (all data keeps track of when it will be destroyed)
+
+Detailed explanation of above concepts in this [link](https://blog.skylight.io/rust-means-never-having-to-close-a-socket/)
