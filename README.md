@@ -72,4 +72,80 @@ _**If your distribution/OS is different than above you can also install Rust wit
 
 # Rust Basics
 
+### Run the application like this from the 'rust_exercise' folder
+```sh
+cargo run
+```
+### Creating a Project with Cargo
+
+Let’s create a new project using Cargo and look at how it differs from our original “Hello, world!” project. Navigate back to your projects directory (or wherever you decided to store your code). Then, on any operating system, run the following:
+
+```bash
+$ cargo new hello_cargo
+$ cd hello_cargo
+```
+
+### A view into rust project structure
+
+```
+/hello_cargo
+| - src/
+| - - main.rs
+| - cargo.toml
+```
+
+### Other important stuff
+
+-  the main function is the entry point into the program `fn main() {`
+- `println!` is a macro that prints a string to the screen
+```
+ println!("Guess the number!");
+ 
+ println!("x = {x} and y + 2 = {}", y + 2); //given x=5 and y=10
+```
+- creating variables [Primitive Datatypes]
+
+```
+let apples = 5; // immutable
+let mut bananas = 5; // mutable
+
+let guess: u32 = "42".parse().expect("Not a number!");
+
+let z: char = 'ℤ'; // with explicit type annotation
+let heart_eyed_cat = '😻';
+
+```
+
+- creating variable [Complex Datatypes]
+
+```
+let a: [i32; 5] = [1, 2, 3, 4, 5];
+
+let mut vec = Vec::new();
+```
+
+```
+struct User {
+    active: bool,
+    username: String,
+    email: String,
+    sign_in_count: u64,
+}
+
+fn main() {
+    let user1 = User {
+        active: true,
+        username: String::from("someusername123"),
+        email: String::from("someone@example.com"),
+        sign_in_count: 1,
+    };
+}
+```
+
 # Differentiating features of Rust
+
+There are three main concepts with Rust:
+
+1. **Ownership** (only one variable "owns" the data at one time, and the owner is in charge of deallocating)
+2. **Borrowing** (you can borrow a reference to an owned variable)
+3. **Lifetimes** (all data keeps track of when it will be destroyed)
