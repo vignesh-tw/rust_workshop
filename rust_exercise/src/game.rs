@@ -92,7 +92,6 @@ impl Game {
         false
     }
 
-    #[inline(always)]
     pub fn is_over(&self) -> bool {
         self.board().state().iter().all(|&v| v == Occupied(Player::X) || v == Occupied(Player::O))
     }
@@ -104,12 +103,11 @@ impl Game {
 
 #[cfg(test)]
 mod game_tests {
-    use std::io::BufRead;
-    use std::io::Write;
-
     use board::BoardPosition::{NotOccupied, Occupied};
     use Player;
     use Player::{O, X};
+    use std::io::BufRead;
+    use std::io::Write;
 
     use crate::board::Board;
 
