@@ -28,7 +28,7 @@ fn main() {
 
         if game.is_over(&game.board().state()) {
             game.board().draw();
-            println!("All fields are used. No one won. (._.)");
+            println!("Match Draw! (._.)");
             break;
         }
 
