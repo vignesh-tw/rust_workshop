@@ -1,5 +1,6 @@
 use board::BoardPosition;
 use board::BoardPosition::{NotOccupied, Occupied};
+
 use crate::{board::Board, player::Player};
 
 pub struct Game {
@@ -24,7 +25,6 @@ impl Game {
         )
     }
 
-    
 
     pub fn ask_user(&mut self, state: &mut [BoardPosition; 9], player: Player) {
         loop {
@@ -68,14 +68,14 @@ impl Game {
     }
 
     pub fn has_won(&self, state: &[BoardPosition]) -> bool {
-        for tmp in 0..3 {
-            if state[tmp] == state[tmp + 3] && state[tmp] == state[tmp + 6] {
+        for board_position in 0..3 {
+            if state[board_position] == state[board_position + 3] && state[board_position] == state[board_position + 6] {
                 return true;
             }
 
-            let tmp = tmp * 3;
+            let board_position = board_position * 3;
 
-            if state[tmp] == state[tmp + 1] && state[tmp] == state[tmp + 2] {
+            if state[board_position] == state[board_position + 1] && state[board_position] == state[board_position + 2] {
                 return true;
             }
         }
@@ -92,5 +92,106 @@ impl Game {
     #[inline(always)]
     pub fn is_over(&self, state: &[BoardPosition]) -> bool {
         state.iter().all(|&v| v == Occupied(Player::X) || v == Occupied(Player::O))
+    }
+}
+
+#[cfg(test)]
+mod game_tests {
+    use std::io::BufRead;
+    use std::io::Write;
+
+    use board::BoardPosition::{NotOccupied, Occupied};
+    use Player::{O, X};
+
+    use crate::board::Board;
+
+    use super::Game;
+
+    #[test]
+    fn should_return_true_if_game_has_been_won_by_either_of_the_player() {
+        let state = [
+            Occupied(X),
+            Occupied(X),
+            Occupied(X),
+            NotOccupied(4),
+            NotOccupied(5),
+            NotOccupied(6),
+            NotOccupied(7),
+            NotOccupied(8),
+            NotOccupied(9),
+        ];
+        let mut board = Board::new();
+        board.update_state(state);
+        let game = Game::new(board);
+
+        let game_won = game.has_won(&state);
+
+        assert!(game_won);
+    }
+
+    #[test]
+    fn should_return_false_if_game_has_not_been_won_by_either_of_the_player() {
+        let state = [
+            Occupied(X),
+            Occupied(O),
+            Occupied(X),
+            NotOccupied(4),
+            NotOccupied(5),
+            NotOccupied(6),
+            NotOccupied(7),
+            NotOccupied(8),
+            NotOccupied(9),
+        ];
+        let mut board = Board::new();
+        board.update_state(state);
+        let game = Game::new(board);
+
+        let game_won = game.has_won(&state);
+
+        assert!(!game_won);
+    }
+
+    #[test]
+    fn should_return_true_if_game_is_over() {
+        let state = [
+            Occupied(X),
+            Occupied(O),
+            Occupied(X),
+            Occupied(X),
+            Occupied(O),
+            Occupied(X),
+            Occupied(O),
+            Occupied(X),
+            Occupied(O),
+        ];
+        let mut board = Board::new();
+        board.update_state(state);
+        let game = Game::new(board);
+
+        let game_over = game.is_over(&state);
+
+        assert!(game_over);
+    }
+
+    #[test]
+    fn should_return_false_if_game_is_not_over() {
+        let state = [
+            Occupied(X),
+            Occupied(O),
+            Occupied(X),
+            Occupied(X),
+            Occupied(O),
+            Occupied(X),
+            Occupied(O),
+            Occupied(X),
+            NotOccupied(9)
+        ];
+        let mut board = Board::new();
+        board.update_state(state);
+        let game = Game::new(board);
+
+        let game_over = game.is_over(&state);
+
+        assert!(!game_over);
     }
 }
