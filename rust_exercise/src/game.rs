@@ -5,11 +5,12 @@ use crate::{board::Board, player::Player};
 
 pub struct Game {
     board: Board,
+    current_player: Player,
 }
 
 impl Game {
-    pub fn new(board: Board) -> Self {
-        Game { board }
+    pub fn new(board: Board, player: Player) -> Self {
+        Game { board, current_player: player }
     }
 
     pub fn board(&self) -> Board {
@@ -26,10 +27,10 @@ impl Game {
     }
 
 
-    pub fn ask_user(&mut self, state: &mut [BoardPosition; 9], player: Player) {
+    pub fn gets_input_from_current_player(&mut self, state: &mut [BoardPosition; 9]) {
         loop {
             print!("Player '");
-            player.print();
+            self.current_player.print();
             println!("', enter a number: ");
 
             let mut input = String::new();
@@ -56,7 +57,7 @@ impl Game {
                         }
                 }
 
-                state[number] = Occupied(player);
+                state[number] = Occupied(self.current_player);
 
                 self.board.update_state(*state);
                 break;
@@ -67,7 +68,7 @@ impl Game {
         }
     }
 
-    pub fn has_won(&self, state: &[BoardPosition]) -> bool {
+    pub fn is_won_by_any_player(&self, state: &[BoardPosition]) -> bool {
         for board_position in 0..3 {
             if state[board_position] == state[board_position + 3] && state[board_position] == state[board_position + 6] {
                 return true;
@@ -93,6 +94,10 @@ impl Game {
     pub fn is_over(&self, state: &[BoardPosition]) -> bool {
         state.iter().all(|&v| v == Occupied(Player::X) || v == Occupied(Player::O))
     }
+
+    pub fn switch_player(&mut self) {
+        self.current_player.switch();
+    }
 }
 
 #[cfg(test)]
@@ -101,6 +106,7 @@ mod game_tests {
     use std::io::Write;
 
     use board::BoardPosition::{NotOccupied, Occupied};
+    use Player;
     use Player::{O, X};
 
     use crate::board::Board;
@@ -122,9 +128,9 @@ mod game_tests {
         ];
         let mut board = Board::new();
         board.update_state(state);
-        let game = Game::new(board);
+        let game = Game::new(board, Player::O);
 
-        let game_won = game.has_won(&state);
+        let game_won = game.is_won_by_any_player(&state);
 
         assert!(game_won);
     }
@@ -144,9 +150,9 @@ mod game_tests {
         ];
         let mut board = Board::new();
         board.update_state(state);
-        let game = Game::new(board);
+        let game = Game::new(board, Player::O);
 
-        let game_won = game.has_won(&state);
+        let game_won = game.is_won_by_any_player(&state);
 
         assert!(!game_won);
     }
@@ -166,7 +172,7 @@ mod game_tests {
         ];
         let mut board = Board::new();
         board.update_state(state);
-        let game = Game::new(board);
+        let game = Game::new(board, Player::O);
 
         let game_over = game.is_over(&state);
 
@@ -188,7 +194,7 @@ mod game_tests {
         ];
         let mut board = Board::new();
         board.update_state(state);
-        let game = Game::new(board);
+        let game = Game::new(board, Player::O);
 
         let game_over = game.is_over(&state);
 

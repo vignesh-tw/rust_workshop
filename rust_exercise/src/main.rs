@@ -1,24 +1,24 @@
-mod board;
-mod game;
-mod player;
-
 use board::Board;
 use game::Game;
 use player::Player;
 
+mod board;
+mod game;
+mod player;
+
 fn main() {
-    let mut board = Board::new();
+    let board = Board::new();
     let mut player = Player::X;
-    let mut game = Game::new(board);
+    let mut game = Game::new(board, player);
 
     game.greeting();
 
     loop {
         game.board().draw();
 
-        game.ask_user(&mut game.board().state(), player);
+        game.gets_input_from_current_player(&mut game.board().state());
 
-        if game.has_won(&game.board().state()) {
+        if game.is_won_by_any_player(&game.board().state()) {
             game.board().draw();
             print!("Player '");
             player.print();
@@ -32,6 +32,6 @@ fn main() {
             break;
         }
 
-        player.switch();
+        game.switch_player();
     }
 }
