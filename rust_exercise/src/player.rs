@@ -1,8 +1,10 @@
 extern crate termcolor;
-use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+
 use std::io::Write;
 
-#[derive(Clone, Copy, PartialEq)]
+use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum Player {
     X,
     O,
@@ -40,5 +42,20 @@ impl Player {
 
         write!(&mut stdout, "{}", self.to_char()).unwrap();
         stdout.reset().unwrap();
+    }
+}
+
+#[cfg(test)]
+mod player_tests {
+
+    use super::Player;
+
+    #[test]
+    fn should_switch_player() {
+        let mut player = Player::X;
+
+        player.switch();
+
+        assert_eq!(player, Player::O);
     }
 }

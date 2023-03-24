@@ -8,13 +8,13 @@ use crate::player::Player;
 
 use self::termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
-#[derive(Clone, Copy, PartialEq)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum BoardPosition {
     Occupied(Player),
     NotOccupied(u8),
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy,)]
 pub struct Board {
     state: [BoardPosition; 9],
 }
@@ -84,5 +84,34 @@ impl Board {
         }
 
         stdout.reset().unwrap();
+    }
+}
+
+#[cfg(test)]
+mod board_tests {
+    use Board;
+    use board::BoardPosition;
+    use board::BoardPosition::{NotOccupied, Occupied};
+    use Player::{O, X};
+
+    #[test]
+    fn should_update_board_state() {
+        let mut board = Board::new();
+        let state = [
+            NotOccupied(1),
+            Occupied(X),
+            NotOccupied(3),
+            Occupied(O),
+            NotOccupied(5),
+            NotOccupied(6),
+            Occupied(O),
+            NotOccupied(8),
+            NotOccupied(9),
+        ];
+
+        board.update_state(state);
+
+        assert_eq!(board.state(), state);
+
     }
 }
