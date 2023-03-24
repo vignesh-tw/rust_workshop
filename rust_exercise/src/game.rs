@@ -132,7 +132,7 @@ mod game_tests {
         board.update_state(state);
         let game = Game::new(board, Player::O);
 
-        let game_won = game.is_won_by_any_player(&state);
+        let game_won = game.is_won_by_any_player();
 
         assert!(game_won);
     }
@@ -154,7 +154,7 @@ mod game_tests {
         board.update_state(state);
         let game = Game::new(board, Player::O);
 
-        let game_won = game.is_won_by_any_player(&state);
+        let game_won = game.is_won_by_any_player();
 
         assert!(!game_won);
     }
@@ -176,7 +176,7 @@ mod game_tests {
         board.update_state(state);
         let game = Game::new(board, Player::O);
 
-        let game_over = game.is_over(&state);
+        let game_over = game.is_over();
 
         assert!(game_over);
     }
@@ -198,7 +198,7 @@ mod game_tests {
         board.update_state(state);
         let game = Game::new(board, Player::O);
 
-        let game_over = game.is_over(&state);
+        let game_over = game.is_over();
 
         assert!(!game_over);
     }
