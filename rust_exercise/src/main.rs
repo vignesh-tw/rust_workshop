@@ -16,9 +16,9 @@ fn main() {
     loop {
         game.board().draw();
 
-        game.gets_input_from_current_player(&mut game.board().state());
+        game.gets_input_from_current_player();
 
-        if game.is_won_by_any_player(&game.board().state()) {
+        if game.is_won_by_any_player() {
             game.board().draw();
             print!("Player '");
             player.print();
@@ -26,7 +26,7 @@ fn main() {
             break;
         }
 
-        if game.is_over(&game.board().state()) {
+        if game.is_over() {
             game.board().draw();
             println!("Match Draw! (._.)");
             break;

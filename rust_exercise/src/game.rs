@@ -27,7 +27,7 @@ impl Game {
     }
 
 
-    pub fn gets_input_from_current_player(&mut self, state: &mut [BoardPosition; 9]) {
+    pub fn gets_input_from_current_player(&mut self) {
         loop {
             print!("Player '");
             self.current_player.print();
@@ -46,6 +46,7 @@ impl Game {
                 }
 
                 let number = number - 1;
+                let mut state = self.board().state();
                 match state[number] {
                     NotOccupied(_) => {}
                     Occupied(player) =>
@@ -59,7 +60,7 @@ impl Game {
 
                 state[number] = Occupied(self.current_player);
 
-                self.board.update_state(*state);
+                self.board.update_state(state);
                 break;
             } else {
                 println!("Only numbers are allowed.");
@@ -68,7 +69,8 @@ impl Game {
         }
     }
 
-    pub fn is_won_by_any_player(&self, state: &[BoardPosition]) -> bool {
+    pub fn is_won_by_any_player(&self) -> bool {
+        let state = self.board().state();
         for board_position in 0..3 {
             if state[board_position] == state[board_position + 3] && state[board_position] == state[board_position + 6] {
                 return true;
@@ -91,8 +93,8 @@ impl Game {
     }
 
     #[inline(always)]
-    pub fn is_over(&self, state: &[BoardPosition]) -> bool {
-        state.iter().all(|&v| v == Occupied(Player::X) || v == Occupied(Player::O))
+    pub fn is_over(&self) -> bool {
+        self.board().state().iter().all(|&v| v == Occupied(Player::X) || v == Occupied(Player::O))
     }
 
     pub fn switch_player(&mut self) {
